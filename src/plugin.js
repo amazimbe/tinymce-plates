@@ -1,23 +1,36 @@
-import _ from 'lodash';
+import Handlebars from 'handlebars';
+import Config from './config';
+import content from './template';
+import context from './context';
 
 const plugin = (editor) => {
+  let item,
+    menu = [],
+    view = { plate: Handlebars.compile(content) };
+
+  for (let j = 0, len = Config.length; j < len; j++) {
+    item = Config[j];
+    editor.addMenuItem(item.name, {
+      text: item.title,
+      context: 'plates',
+      size: { x: item.x, y: item.y },
+
+      onclick() {
+        let x = this.settings.size.x,
+          y = this.settings.size.y,
+          template = view.plate,
+          html = template(context(x, y));
+        editor.insertContent(html);
+      }
+    });
+    menu.push(editor.menuItems[item.name]);
+  }
+
   editor.addButton('plates', {
-    text: 'plates',
-    icon: false,
-    onclick: () => {
-      // Open window
-      editor.windowManager.open({
-        title: 'plates plugin',
-        body: [
-          { type: 'textbox', name: 'title' }
-        ],
-        onsubmit(e) {
-          // Insert content when the window form is submitted
-          const kebabbyString = _.kebabCase(e.data.title);
-          editor.insertContent(kebabbyString);
-        }
-      });
-    }
+    tooltip: 'Plate',
+    icon: 'plates',
+    menu: menu,
+    type: 'menubutton'
   });
 };
 
