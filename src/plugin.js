@@ -4,9 +4,9 @@ import content from './template';
 import context from './context';
 
 const plugin = (editor) => {
-  let item,
-    menu = [],
-    view = { plate: Handlebars.compile(content) };
+  let item;
+  let menu = [];
+  let view = { plate: Handlebars.compile(content) };
 
   for (let j = 0, len = Config.length; j < len; j++) {
     item = Config[j];
@@ -16,10 +16,10 @@ const plugin = (editor) => {
       size: { x: item.x, y: item.y },
 
       onclick() {
-        let x = this.settings.size.x,
-          y = this.settings.size.y,
-          template = view.plate,
-          html = template(context(x, y));
+        let x = this.settings.size.x;
+        let y = this.settings.size.y;
+        let template = view.plate;
+        let html = template(context(x, y));
         editor.insertContent(html);
       }
     });
@@ -29,7 +29,7 @@ const plugin = (editor) => {
   editor.addButton('plates', {
     tooltip: 'Plate',
     icon: 'plates',
-    menu: menu,
+    menu,
     type: 'menubutton'
   });
 };

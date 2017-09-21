@@ -15,5 +15,5 @@ export default function (x, y) {
     i += 1;
   }
 
-  return { xData: xData, yData: yData };
+  return { xData, yData };
 }
